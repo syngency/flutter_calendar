@@ -9,11 +9,12 @@ import 'dart:typed_data';
 import 'dart:async';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   // Comment this line to enable debug printing...
   debugPrint = (String message, {int wrapWidth}) {};
 
   ByteData loadedData;
-
   await Future.wait<void>(<Future<void>>[
     rootBundle.load('assets/timezone/2018c.tzf').then((ByteData data) {
       loadedData = data;
@@ -34,12 +35,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      localizationsDelegates: const <LocalizationsDelegate<MaterialLocalizations>>[
-        GlobalMaterialLocalizations.delegate
-      ],
+      localizationsDelegates: const <LocalizationsDelegate<MaterialLocalizations>>[GlobalMaterialLocalizations.delegate],
       supportedLocales: const <Locale>[
-        const Locale('en', ''), 
-        const Locale('fr', ''), 
+        const Locale('en', ''),
+        const Locale('fr', ''),
       ],
       home: new MyHomePage(title: 'Flutter Calendar demo'),
     );
@@ -71,20 +70,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<CalendarEvent> getEvents(DateTime start, DateTime end) {
     if (loc != null && events.length == 0) {
-      TZDateTime nowTime =
-      new TZDateTime.now(loc).subtract(new Duration(days: 5));
+      TZDateTime nowTime = new TZDateTime.now(loc).subtract(new Duration(days: 5));
       for (int i = 0; i < 20; i++) {
-        TZDateTime start =
-        nowTime.add(new Duration(days: i + random.nextInt(10)));
-        events.add(new CalendarEvent(
-            index: i,
-            instant: start,
-            instantEnd: start.add(new Duration(minutes: 30))));
+        TZDateTime start = nowTime.add(new Duration(days: i + random.nextInt(10)));
+        events.add(new CalendarEvent(index: i, instant: start, instantEnd: start.add(new Duration(minutes: 30))));
       }
     }
     return events;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -108,10 +101,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     location: loc,
                     buildItem: buildItem,
                     getEvents: getEvents,
-                    bannerHeader:
-                        new AssetImage("assets/images/calendarheader.png"),
-                    monthHeader:
-                        new AssetImage("assets/images/calendarbanner.jpg"),
+                    bannerHeader: new AssetImage("assets/images/calendarheader.png"),
+                    monthHeader: new AssetImage("assets/images/calendarbanner.jpg"),
                     weekBeginsWithDay: 1, // Sunday = 0, Monday = 1, Tuesday = 2, ..., Saturday = 6
                   ),
                 );
